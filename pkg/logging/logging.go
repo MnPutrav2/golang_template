@@ -1,14 +1,14 @@
 package log
 
 import (
-	"clean-arsitektur/pkg"
+	ip "clean-arsitektur/pkg/ip"
 	"fmt"
 	"net/http"
 	"time"
 )
 
 func Log(message, level string, r *http.Request) {
-	ip := pkg.ClientIP(r)
+	ip := ip.ClientIP(r)
 	t := time.Now()
 
 	red := "\033[31m"

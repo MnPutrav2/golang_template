@@ -20,9 +20,6 @@ func main() {
 	case "server":
 		cmd.Server()
 
-	case "build":
-		cmd.Build()
-
 	case "migrate":
 		cmd.Migrate()
 
@@ -58,7 +55,6 @@ func Help() {
 	fmt.Print(`
 Available commands:
 	go run . server					run server
-	go run . build					build project
 	go run . migrate				run migration
 	go run . rollback				down migration
 	go run . seed					run seed SQL

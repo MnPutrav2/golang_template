@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"clean-arsitektur/pkg"
+	ip "clean-arsitektur/pkg/ip"
 	"net/http"
 	"sync"
 	"time"
@@ -29,7 +29,7 @@ func limiter(ip string, rps, burst int) *rate.Limiter {
 
 func RateLimiter(sec, burst int, next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		ip := pkg.ClientIP(r)
+		ip := ip.ClientIP(r)
 		limiter := limiter(ip, sec, burst)
 
 		if !limiter.Allow() {

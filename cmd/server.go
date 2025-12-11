@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"clean-arsitektur/internal/config"
-	"clean-arsitektur/internal/route"
 	"fmt"
 	"net/http"
 	"os"
@@ -16,7 +15,7 @@ func Server() {
 	defer db.Close()
 
 	// Route
-	http.HandleFunc("/book", route.BookRoute(db))
+	// http.HandleFunc("/book", route.BookRoute(db))
 
 	fmt.Println("[  Database connected ]")
 	fmt.Println("[  Server listen in port ", os.Getenv("APP_LISTEN"), " ]")

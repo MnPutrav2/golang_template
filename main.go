@@ -46,6 +46,14 @@ func main() {
 		}
 		make.Seeder(args[0])
 
+	case "make:template":
+		if len(args) == 0 || len(args[1]) == 0 || len(args[2]) == 0 {
+			fmt.Println("Usage: go run . make:template <folder_name> <file_name> <type>")
+			return
+		}
+
+		make.Template(args[0], args[1], args[2])
+
 	default:
 		fmt.Print("Command not found")
 	}
@@ -54,12 +62,13 @@ func main() {
 func Help() {
 	fmt.Print(`
 Available commands:
-	go run . server					run server
-	go run . migrate				run migration
-	go run . rollback				down migration
-	go run . seed					run seed SQL
-	go run . fresh					rollback -> migrate -> seed
-	go run . make:migration <table_name>		create timestamped up/down migration pair
-	go run . make:seed <table_name>			create seed SQL template
+	go run . server							run server
+	go run . migrate						run migration
+	go run . rollback						down migration
+	go run . seed							run seed SQL
+	go run . fresh							rollback -> migrate -> seed
+	go run . make:migration <table_name>				create timestamped up/down migration pair
+	go run . make:seed <table_name>					create seed SQL template
+	go run . make:template <create_folder> <file_name> <type>	create template [route, handler, service, repository]
 	`)
 }

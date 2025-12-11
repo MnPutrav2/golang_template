@@ -9,10 +9,10 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func Database() *sql.DB {
+func Database() (*sql.DB, error) {
 	err := godotenv.Load()
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 
 	addr := os.Getenv("DB_ADDR")
@@ -30,8 +30,8 @@ func Database() *sql.DB {
 
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return db
+	return db, nil
 }

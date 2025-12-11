@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"clean-arsitektur/internal/config"
@@ -8,8 +8,11 @@ import (
 	"os"
 )
 
-func main() {
-	db := config.Database()
+func Server() {
+	db, err := config.Database()
+	if err != nil {
+		panic(err)
+	}
 	defer db.Close()
 
 	// Route

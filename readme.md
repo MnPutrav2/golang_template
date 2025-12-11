@@ -2,8 +2,6 @@
 
 ![Logo Aplikasi](./asset/flowchart.png)
 
-## Migrate
-
 ```bash
-make migrate
+go run .
 ```

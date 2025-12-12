@@ -39,6 +39,9 @@ func main() {
 		}
 		make.Migration(args[0])
 
+	case "scheduler":
+		cmd.Schduler()
+
 	case "make:seeder":
 		if len(args) == 0 {
 			fmt.Println("Usage: go run . make:seeder <Name>")
@@ -62,13 +65,22 @@ func main() {
 func Help() {
 	fmt.Print(`
 Available commands:
-	go run . server							run server
-	go run . migrate						run migration
-	go run . rollback						down migration
-	go run . seed							run seed SQL
-	go run . fresh							rollback -> migrate -> seed
-	go run . make:migration <table_name>				create timestamped up/down migration pair
-	go run . make:seed <table_name>					create seed SQL template
-	go run . make:template <create_folder> <file_name> <type>	create template [route, handler, service, repository]
+
+	Application:
+		go run . server							run server
+
+	Database migration:
+		go run . migrate						run migration
+		go run . rollback						down migration
+		go run . seed							run seed SQL
+		go run . fresh							rollback -> migrate -> seed
+		go run . make:migration <table_name>				create timestamped up/down migration pair
+		go run . make:seed <table_name>					create seed SQL template
+		
+	Create template:
+		go run . make:template <create_folder> <file_name> <type>	create template [route, handler, service, repository]
+
+	Scheduler:
+		go run . scheduler						scheduler job, edit cmd/scheduler.go
 	`)
 }

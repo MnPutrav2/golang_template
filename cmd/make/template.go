@@ -22,7 +22,26 @@ import (
 	"net/http"
 )
 
-func HandlerName(db *sql.DB) http.HandlerFunc {
+func ` + capitalize(name) + `Controller(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		switch r.Method {
+		case "GET":
+			// Write method get
+			// Example
+			handlerName(db)(w, r)
+		case "POST":
+			// Write method post
+		case "PUT":
+			// Write method put
+		case "DELETE":
+			// Write method delete
+		}
+
+	}
+}
+
+func handlerName(db *sql.DB) http.HandlerFunc {
 	return middleware.CORS(
 		middleware.RateLimiter(1, 1, func(w http.ResponseWriter, r *http.Request) {
 			// Write code in here
@@ -34,31 +53,9 @@ func HandlerName(db *sql.DB) http.HandlerFunc {
 	)
 }`
 
-	routTemp := `package route
+	// this service template
 
-import (
-	"database/sql"
-	"net/http"
-)
-
-func RouteName(db *sql.DB) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-
-		switch r.Method {
-		case "GET":
-			// Write method get
-		case "POST":
-			// Write method post
-		case "PUT":
-			// Write method put
-		case "DELETE":
-			// Write method delete
-		}
-
-	}
-}`
-
-	srvImplTemp := `package service
+	servTemp := `package service
 
 import (
 	"database/sql"
@@ -77,18 +74,14 @@ func New` + capitalize(name) + `Service(db *sql.DB) ` + capitalize(name) + `Serv
 	return &` + name + `Service{db}
 }
 
-// Write code in here`
-
-	servTemp := `package service
-
+// Write code in here
 func (q *` + name + `Service) ExampleService(id string) (string, error) {
-
-	// Write code in here
-
 	return "success", nil
 }`
 
-	repoImplTemp := `package repository
+	// this repository template
+
+	repoTemp := `package repository
 
 import (
 	"database/sql"
@@ -107,13 +100,10 @@ func New` + capitalize(name) + `Repository(db *sql.DB) ` + capitalize(name) + `R
 	return &` + name + `Repository{db}
 }
 
-// Write code in here`
-
-	repoTemp := `package repository
-
+// Write code in here
 func (q *` + name + `Repository) ExampleRepo(id string) error {
 
-	if _, err := q.db.Exec("INSERT INTO test VALUES($1)", id); err != nil {
+	if _, err := q.db.Exec("INSERT INTO table VALUES($1)", id); err != nil {
 		return err
 	}
 
@@ -121,38 +111,24 @@ func (q *` + name + `Repository) ExampleRepo(id string) error {
 }`
 
 	switch ty {
-	case "handler":
+	case "-h":
 		handleTemp := process(hdlTemp, "handler", dir, name)
 		fmt.Println(handleTemp)
 		return
-	case "service":
-		serviceImplTemp := process(srvImplTemp, "service", dir, name+"_impl")
+	case "-s":
 		serviceTemp := process(servTemp, "service", dir, name)
-		fmt.Println(serviceImplTemp)
 		fmt.Println(serviceTemp)
 		return
-	case "route":
-		routeTemp := process(routTemp, "route", "", name)
-		fmt.Println(routeTemp)
-		return
-	case "repository":
-		repositoryImplTemp := process(repoImplTemp, "repository", dir, name+"_impl")
+	case "-r":
 		repositoryTemp := process(repoTemp, "repository", dir, name)
-		fmt.Println(repositoryImplTemp)
 		fmt.Println(repositoryTemp)
 		return
-	case "all":
+	case "-a":
 		handleTemp := process(hdlTemp, "handler", dir, name)
-		routeTemp := process(routTemp, "route", "", name)
-		serviceImplTemp := process(srvImplTemp, "service", dir, name+"_impl")
 		serviceTemp := process(servTemp, "service", dir, name)
-		repositoryImplTemp := process(repoImplTemp, "repository", dir, name+"_impl")
 		repositoryTemp := process(repoTemp, "repository", dir, name)
 		fmt.Println(handleTemp)
-		fmt.Println(routeTemp)
-		fmt.Println(serviceImplTemp)
 		fmt.Println(serviceTemp)
-		fmt.Println(repositoryImplTemp)
 		fmt.Println(repositoryTemp)
 		return
 	default:

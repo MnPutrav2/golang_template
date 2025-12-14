@@ -9,7 +9,26 @@ import (
 	"net/http"
 )
 
-func HandlerName(db *sql.DB) http.HandlerFunc {
+func ExampleController(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		switch r.Method {
+		case "GET":
+			// Write method get
+			// Example
+			handlerName(db)(w, r)
+		case "POST":
+			// Write method post
+		case "PUT":
+			// Write method put
+		case "DELETE":
+			// Write method delete
+		}
+
+	}
+}
+
+func handlerName(_ *sql.DB) http.HandlerFunc {
 	return middleware.CORS(
 		middleware.RateLimiter(1, 1, func(w http.ResponseWriter, r *http.Request) {
 			// Write code in here

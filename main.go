@@ -78,7 +78,7 @@ Available commands:
 		go run . make:seed <table_name>					create seed SQL template
 		
 	Create template:
-		go run . make:template <create_folder> <file_name> <type>	create template [route, handler, service, repository]
+		go run . make:template <create_folder> <file_name> <type>	create template, <type> = [-h = create handler, -ro = create route, -r = create repository, -s = create service, -a = create all]
 
 	Scheduler:
 		go run . scheduler						scheduler job, edit cmd/scheduler.go

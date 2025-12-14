@@ -1,9 +1,9 @@
-package auth
+package jwt
 
 import (
 	"fmt"
 
-	"github.com/golang-jwt/jwt"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 func ValidateJWT(tokenString string) (*Claims, error) {

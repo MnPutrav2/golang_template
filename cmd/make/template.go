@@ -11,6 +11,7 @@ import (
 func Template(dir, name, ty string) {
 	module := moduleReader()
 
+	// This handler template
 	hdlTemp := fmt.Sprintf(`
 package handler
 
@@ -68,8 +69,8 @@ type %sService struct {
 }
 
 type %sService interface {
-	ExampleService(id string) (string, error)
 	// Add function in here
+	ExampleService(id string) (string, error)
 }
 
 func New%sService(db *sql.DB) %sService {
@@ -89,6 +90,7 @@ package repository
 
 import (
 	"database/sql"
+	// "%s/internal/model"
 )
 
 type %sRepository struct {
@@ -96,8 +98,9 @@ type %sRepository struct {
 }
 
 type %sRepository interface {
-	ExampleRepo(id string) error
 	// Add function in here
+	Add%s(id string) error
+	// Pagination%s(page, size int, keyword string) ([]model.Name, int, error)
 }
 
 func New%sRepository(db *sql.DB) %sRepository {
@@ -105,15 +108,48 @@ func New%sRepository(db *sql.DB) %sRepository {
 }
 
 // Write code in here
-func (q *%sRepository) ExampleRepo(id string) error {
+func (q *%sRepository) Add%s(id string) error {
 
-	if _, err := q.db.Exec("INSERT INTO table VALUES($1)", id); err != nil {
+	query := "INSERT INTO table VALUES($1)"
+
+	if _, err := q.db.Exec(query, id); err != nil {
 		return err
 	}
 
 	return nil
 }
-`, name, capitalize(name), capitalize(name), capitalize(name), name, name)
+
+// Pagination --------------------------------------------------------------------------------------------------------------------------------------
+// func (q *%sRepository) Pagination%s(page, size int, keyword string) ([]model.Name, int, error) {
+
+// 	var count int
+
+// 	if err := q.db.QueryRow("SELECT COUNT(*) FROM table_name WHERE row_name ILIKE $1", keyword).Scan(&count); err != nil {
+// 		return nil, 0, err
+// 	}
+
+// 	res, err := q.db.QueryRow("SELECT * FROM table_name WHERE row_name ILIKE $1 LIMIT $2 OFFSET $3", keyword, size, page)
+// 	if err != nil {
+// 		return nil, 0, err
+// 	}
+
+// 	var result []model.Name
+// 	for res.Next() {
+// 		var data model.Name
+
+// 		err := res.Scan(&data.ID)
+// 		if err != nil {
+// 			return nil, 0, err
+// 		}
+
+// 		result = append(result, data)
+// 	}
+
+// 	return result, count, nil
+
+// }
+// Pagination --------------------------------------------------------------------------------------------------------------------------------------
+`, module, name, capitalize(name), capitalize(name), capitalize(name), capitalize(name), capitalize(name), name, name, capitalize(name), name, capitalize(name))
 
 	switch ty {
 	case "-h":
